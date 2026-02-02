@@ -1,0 +1,19 @@
+
+services:
+  pedidos:
+    build: ./pedidos
+    image: pedidos-veloz/pedidos:1.0
+    ports:
+      - "3001:3000"
+
+  pagamentos:
+    build: ./pagamentos
+    image: pedidos-veloz/pagamentos:1.0
+    ports:
+      - "3002:3000"
+
+  estoque:
+    build: ./estoque
+    image: pedidos-veloz/estoque:1.0
+    ports:
+      - "3003:3000"

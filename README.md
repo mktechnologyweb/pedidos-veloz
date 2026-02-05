@@ -10,6 +10,18 @@ O sistema é composto por três microsserviços:
 - Estoque
 
 ---
+## 🔁 CI/CD
+
+O projeto utiliza GitHub Actions para Integração Contínua (CI).
+O pipeline é acionado automaticamente a cada push na branch `main`,
+realizando o build das imagens Docker dos três microsserviços:
+
+- Pedidos
+- Pagamentos
+- Estoque
+
+Esse processo garante que todos os serviços sejam validados
+automaticamente a cada alteração no código.
 
 ## 🐳 Execução com Docker Compose
 

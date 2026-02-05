@@ -32,3 +32,21 @@ automaticamente a cada alteração no código.
 ### Subir o ambiente local
 ```bash
 docker compose up --build
+# Terraform — Infraestrutura como Código
+
+## 📌 Objetivo
+Este diretório contém a estrutura básica de Terraform utilizada para
+demonstrar o conceito de Infraestrutura como Código (IaC) no projeto.
+
+## ⚙️ Justificativa Técnica
+Neste trabalho, o Terraform foi utilizado em nível estrutural,
+com o provider Kubernetes configurado, demonstrando como a infraestrutura
+poderia ser gerenciada de forma declarativa.
+
+A aplicação real da infraestrutura não foi realizada em ambiente de nuvem
+por limitações de escopo acadêmico, sendo o foco a organização, versionamento
+e padronização da infraestrutura como código.
+
+## 📁 Estrutura
+- main.tf: configuração do Terraform e provider Kubernetes
+- variables.tf: variáveis reutilizáveis do projeto

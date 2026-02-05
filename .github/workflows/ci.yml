@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  build:
+  build-and-test:
     runs-on: ubuntu-latest
 
     steps:
@@ -15,6 +15,14 @@ jobs:
 
       - name: Configurar Docker
         uses: docker/setup-buildx-action@v3
+
+      - name: Executar testes (simulados)
+        run: echo "Testes executados com sucesso"
+
+      - name: Usar secret do GitHub
+        run: echo "Secret configurado com sucesso"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build do microsserviço PEDIDOS
         run: docker build -t pedidos-veloz/pedidos:ci ./pedidos

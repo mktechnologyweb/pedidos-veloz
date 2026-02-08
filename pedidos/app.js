@@ -1,8 +1,12 @@
 const express = require('express');
 const app = express();
 
-app.get('/pedidos', (req, res) => {
-  res.json({ mensagem: 'Serviço de pedidos funcionando' });
+app.get('/', (req, res) => {
+  res.send('Serviço OK');
+});
+
+app.get('/health', (req, res) => {
+  res.status(200).send('OK');
 });
 
 app.listen(3000, () => {

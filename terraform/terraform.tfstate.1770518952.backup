@@ -1,0 +1,154 @@
+{
+  "version": 4,
+  "terraform_version": "1.14.4",
+  "serial": 4,
+  "lineage": "150162cd-5e3e-ffd7-9a01-b1c703b5bdd5",
+  "outputs": {},
+  "resources": [
+    {
+      "mode": "managed",
+      "type": "kubernetes_config_map",
+      "name": "pedidos_config",
+      "provider": "provider[\"registry.terraform.io/hashicorp/kubernetes\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "binary_data": null,
+            "data": {
+              "AMBIENTE": "producao",
+              "ESTOQUE_URL": "http://estoque",
+              "PAGAMENTOS_URL": "http://pagamentos"
+            },
+            "id": "pedidos-veloz/pedidos-config",
+            "immutable": false,
+            "metadata": [
+              {
+                "annotations": null,
+                "generate_name": "",
+                "generation": 0,
+                "labels": null,
+                "name": "pedidos-config",
+                "namespace": "pedidos-veloz",
+                "resource_version": "17999",
+                "uid": "2ce569b0-2c7d-4991-ba49-db04506927f2"
+              }
+            ]
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 1,
+          "identity": {
+            "api_version": "v1",
+            "kind": "ConfigMap",
+            "name": "pedidos-config",
+            "namespace": "pedidos-veloz"
+          },
+          "private": "bnVsbA==",
+          "dependencies": [
+            "kubernetes_namespace.pedidos_veloz"
+          ]
+        }
+      ]
+    },
+    {
+      "mode": "managed",
+      "type": "kubernetes_namespace",
+      "name": "pedidos_veloz",
+      "provider": "provider[\"registry.terraform.io/hashicorp/kubernetes\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "id": "pedidos-veloz",
+            "metadata": [
+              {
+                "annotations": null,
+                "generate_name": "",
+                "generation": 0,
+                "labels": null,
+                "name": "pedidos-veloz",
+                "resource_version": "17994",
+                "uid": "9a2cbdf2-d6b6-457c-87fa-3f283647966d"
+              }
+            ],
+            "timeouts": null,
+            "wait_for_default_service_account": false
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 1,
+          "identity": {
+            "api_version": "v1",
+            "kind": "Namespace",
+            "name": "pedidos-veloz"
+          },
+          "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiZGVsZXRlIjozMDAwMDAwMDAwMDB9fQ=="
+        }
+      ]
+    },
+    {
+      "mode": "managed",
+      "type": "kubernetes_secret",
+      "name": "pedidos_secret",
+      "provider": "provider[\"registry.terraform.io/hashicorp/kubernetes\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "binary_data": null,
+            "binary_data_wo": null,
+            "binary_data_wo_revision": null,
+            "data": {
+              "DB_PASSWORD": "c2VuaGExMjM=",
+              "DB_USER": "YWRtaW4="
+            },
+            "data_wo": null,
+            "data_wo_revision": null,
+            "id": "pedidos-veloz/pedidos-secret",
+            "immutable": false,
+            "metadata": [
+              {
+                "annotations": null,
+                "generate_name": "",
+                "generation": 0,
+                "labels": null,
+                "name": "pedidos-secret",
+                "namespace": "pedidos-veloz",
+                "resource_version": "18000",
+                "uid": "eef5181c-aacb-494e-ad33-9373202a1bbd"
+              }
+            ],
+            "timeouts": null,
+            "type": "Opaque",
+            "wait_for_service_account_token": true
+          },
+          "sensitive_attributes": [
+            [
+              {
+                "type": "get_attr",
+                "value": "binary_data"
+              }
+            ],
+            [
+              {
+                "type": "get_attr",
+                "value": "data"
+              }
+            ]
+          ],
+          "identity_schema_version": 1,
+          "identity": {
+            "api_version": "v1",
+            "kind": "Secret",
+            "name": "pedidos-secret",
+            "namespace": "pedidos-veloz"
+          },
+          "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiY3JlYXRlIjo2MDAwMDAwMDAwMH19",
+          "dependencies": [
+            "kubernetes_namespace.pedidos_veloz"
+          ]
+        }
+      ]
+    }
+  ],
+  "check_results": null
+}

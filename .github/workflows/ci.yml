@@ -1,34 +1,38 @@
-name: CI Pipeline - Microsserviços
+name: CI Pipeline
 
 on:
   push:
-    branches:
-      - main
+    branches: ["main"]
 
 jobs:
-  build-and-test:
+  build:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout do código
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Configurar Docker
-        uses: docker/setup-buildx-action@v3
+      - name: Login Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USER }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Executar testes (simulados)
-        run: echo "Testes executados com sucesso"
+      - name: Build & Push API Gateway
+        run: |
+          docker build -t ${{ secrets.DOCKER_USER }}/api-gateway:latest ./api-gateway
+          docker push ${{ secrets.DOCKER_USER }}/api-gateway:latest
 
-      - name: Usar secret do GitHub
-        run: echo "Secret configurado com sucesso"
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Build & Push Pedidos
+        run: |
+          docker build -t ${{ secrets.DOCKER_USER }}/pedidos:latest ./pedidos
+          docker push ${{ secrets.DOCKER_USER }}/pedidos:latest
 
-      - name: Build do microsserviço PEDIDOS
-        run: docker build -t pedidos-veloz/pedidos:ci ./pedidos
+      - name: Build & Push Pagamentos
+        run: |
+          docker build -t ${{ secrets.DOCKER_USER }}/pagamentos:latest ./pagamentos
+          docker push ${{ secrets.DOCKER_USER }}/pagamentos:latest
 
-      - name: Build do microsserviço PAGAMENTOS
-        run: docker build -t pedidos-veloz/pagamentos:ci ./pagamentos
-
-      - name: Build do microsserviço ESTOQUE
-        run: docker build -t pedidos-veloz/estoque:ci ./estoque
+      - name: Build & Push Estoque
+        run: |
+          docker build -t ${{ secrets.DOCKER_USER }}/estoque:latest ./estoque
+          docker push ${{ secrets.DOCKER_USER }}/estoque:latest

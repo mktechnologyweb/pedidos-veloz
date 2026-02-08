@@ -1,8 +1,8 @@
 const express = require('express');
 const app = express();
 
-app.get('/estoque', (req, res) => {
-  res.json({ mensagem: 'Serviço de estoque funcionando' });
+app.get('/', (req, res) => {
+  res.send('Serviço OK');
 });
 
 app.listen(3000, () => {

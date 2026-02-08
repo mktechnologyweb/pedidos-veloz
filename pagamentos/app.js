@@ -1,8 +1,8 @@
 const express = require('express');
 const app = express();
 
-app.get('/pagamentos', (req, res) => {
-  res.json({ mensagem: 'Serviço de pagamentos funcionando' });
+app.get('/', (req, res) => {
+  res.send('Serviço OK');
 });
 
 app.listen(3000, () => {

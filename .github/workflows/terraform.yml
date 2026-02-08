@@ -1,4 +1,4 @@
-name: Terraform Deploy
+name: Terraform Validate
 
 on:
   push:
@@ -24,14 +24,6 @@ jobs:
         working-directory: terraform
         run: terraform init
 
-      - name: Terraform Plan
+      - name: Terraform Validate
         working-directory: terraform
-        run: terraform plan
-        env:
-          TF_VAR_docker_user: ${{ secrets.DOCKER_USER }}
-
-      - name: Terraform Apply
-        working-directory: terraform
-        run: terraform apply -auto-approve
-        env:
-          TF_VAR_docker_user: ${{ secrets.DOCKER_USER }}
+        run: terraform validate

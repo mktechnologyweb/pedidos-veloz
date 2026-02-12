@@ -1,52 +1,244 @@
-# Pedidos Veloz — Microsserviços com Docker e Kubernetes
+# 🚀 Pedidos Veloz – Cloud DevOps Project
 
-## 📌 Descrição do Projeto
-Este projeto demonstra a aplicação prática de conceitos de Cloud DevOps, utilizando
-microsserviços, Docker, Kubernetes e CI/CD.
-
-O sistema é composto por três microsserviços:
-- Pedidos
-- Pagamentos
-- Estoque
+Sistema de microsserviços containerizado com Docker, orquestrado com Kubernetes e provisionado via Terraform, com pipeline CI/CD automatizado no GitHub Actions.
 
 ---
-## 🔁 CI/CD
 
-O projeto utiliza GitHub Actions para Integração Contínua (CI).
-O pipeline é acionado automaticamente a cada push na branch `main`,
-realizando o build das imagens Docker dos três microsserviços:
+# 📌 Arquitetura do Projeto
 
-- Pedidos
-- Pagamentos
-- Estoque
+O sistema é composto por 4 microsserviços:
 
-Esse processo garante que todos os serviços sejam validados
-automaticamente a cada alteração no código.
+* 📦 **Pedidos**
+* 📦 **Estoque**
+* 💳 **Pagamentos**
+* 🌐 **API Gateway** (ponto de entrada)
 
-## 🐳 Execução com Docker Compose
+Arquitetura baseada em:
 
-### Pré-requisitos
-- Docker
-- Docker Compose
+* Microsserviços independentes
+* Comunicação via HTTP
+* API Gateway realizando proxy reverso
+* Kubernetes para orquestração
+* Terraform para provisionamento da infraestrutura
+* CI/CD com GitHub Actions
 
-### Subir o ambiente local
+---
+
+# 🐳 Docker
+
+Cada microsserviço possui:
+
+* Dockerfile próprio
+* Build automatizado via GitHub Actions
+* Push para Docker Hub
+
+Imagem padrão:
+
+```
+<docker_user>/nome-servico:latest
+```
+
+Exemplo:
+
+```
+mauricioodevops/pedidos:latest
+```
+
+---
+
+# ☸️ Kubernetes
+
+Todos os serviços são executados dentro do namespace:
+
+```
+pedidos-veloz
+```
+
+## Recursos Criados
+
+* Namespace
+* Deployment
+* Service
+* ConfigMap
+* Secret
+* HPA (Horizontal Pod Autoscaler)
+
+---
+
+## 🔹 Deployments
+
+Cada microsserviço roda com:
+
+* 2 réplicas
+* Liveness Probe
+* Readiness Probe
+* Variáveis vindas de ConfigMap e Secret
+
+Exemplo – Pedidos:
+
+* Porta do container: `3000`
+* Probes: `/health`
+
+---
+
+## 🔹 Services
+
+| Serviço     | Tipo      | Porta Interna | NodePort |
+| ----------- | --------- | ------------- | -------- |
+| api-gateway | NodePort  | 3000          | 30800    |
+| pedidos     | ClusterIP | 3000          | —        |
+| estoque     | ClusterIP | 3000          | —        |
+| pagamentos  | ClusterIP | 3000          | —        |
+
+---
+
+## 🔹 API Gateway
+
+* Executa proxy reverso
+* Rotas:
+
+  * `/pedidos`
+  * `/pagamentos`
+  * `/estoque`
+* Porta do container: **3000**
+
+Correção aplicada:
+O Service estava configurado com `targetPort: 8080`, mas o container rodava na `3000`.
+Foi ajustado para `targetPort: 3000`.
+
+---
+
+# 📈 HPA – Auto Scaling
+
+O serviço `pedidos` possui:
+
+* Mínimo: 2 pods
+* Máximo: 5 pods
+* Métrica: CPU
+* Meta: 50% de utilização
+
+---
+
+# 🏗️ Terraform
+
+Infraestrutura provisionada via Terraform.
+
+## Recursos Criados
+
+* `kubernetes_namespace_v1`
+* `kubernetes_deployment`
+* `kubernetes_service`
+* `kubernetes_config_map_v1`
+* `kubernetes_secret_v1`
+* `kubernetes_horizontal_pod_autoscaler_v2`
+
+Provider configurado para:
+
+```
+minikube
+```
+
+## Variáveis Utilizadas
+
+```
+docker_user
+```
+
+Imagem configurada dinamicamente:
+
+```hcl
+image = "${var.docker_user}/pedidos:latest"
+```
+
+---
+
+# 🔁 CI/CD – GitHub Actions
+
+Pipeline automatizado contendo:
+
+1. Checkout do código
+2. Build das imagens Docker
+3. Push para Docker Hub
+4. Terraform Init
+5. Terraform Plan
+6. Terraform Apply
+
+Secrets configurados no GitHub:
+
+* `DOCKER_USER`
+* `DOCKER_PASSWORD` (token do Docker Hub)
+
+---
+
+# 🖥️ Como Executar Localmente
+
+## 1️⃣ Subir Minikube
+
 ```bash
-docker compose up --build
-# Terraform — Infraestrutura como Código
+minikube start
+```
 
-## 📌 Objetivo
-Este diretório contém a estrutura básica de Terraform utilizada para
-demonstrar o conceito de Infraestrutura como Código (IaC) no projeto.
+## 2️⃣ Aplicar Terraform
 
-## ⚙️ Justificativa Técnica
-Neste trabalho, o Terraform foi utilizado em nível estrutural,
-com o provider Kubernetes configurado, demonstrando como a infraestrutura
-poderia ser gerenciada de forma declarativa.
+```bash
+terraform init
+terraform plan
+terraform apply
+```
 
-A aplicação real da infraestrutura não foi realizada em ambiente de nuvem
-por limitações de escopo acadêmico, sendo o foco a organização, versionamento
-e padronização da infraestrutura como código.
+## 3️⃣ Verificar pods
 
-## 📁 Estrutura
-- main.tf: configuração do Terraform e provider Kubernetes
-- variables.tf: variáveis reutilizáveis do projeto
+```bash
+kubectl get pods -n pedidos-veloz
+```
+
+## 4️⃣ Acessar API Gateway
+
+Opção recomendada:
+
+```bash
+minikube service api-gateway -n pedidos-veloz
+```
+
+Ou:
+
+```bash
+kubectl port-forward service/api-gateway 3000:3000 -n pedidos-veloz
+```
+
+Abrir no navegador:
+
+```
+http://localhost:3000
+```
+
+---
+
+# 📊 Conceitos DevOps Aplicados
+
+* Microsserviços
+* Containerização
+* Orquestração
+* Infraestrutura como Código (IaC)
+* Auto Scaling
+* CI/CD
+* Separação de ConfigMap e Secret
+* Observabilidade via logs Kubernetes
+
+---
+
+# 📚 Tecnologias Utilizadas
+
+* Node.js
+* Docker
+* Kubernetes
+* Terraform
+* GitHub Actions
+* Minikube
+
+---
+
+# 👨‍💻 Autor
+
+Mauricio Francesco
+Projeto acadêmico – Cloud DevOps

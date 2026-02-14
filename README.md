@@ -1,3 +1,6 @@
+# Video Link
+https://youtu.be/hxgZ3Tz3TYA
+
 # 🚀 Pedidos Veloz – Cloud DevOps Project
 
 Sistema de microsserviços containerizado com Docker, orquestrado com Kubernetes e provisionado via Terraform, com pipeline CI/CD automatizado no GitHub Actions.
